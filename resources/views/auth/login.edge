@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ assetsUrl('icon.png') }}">
+    <title>{{ title }} </title>
+		<!-- Vendors Style-->
+		<link rel="stylesheet" href="{{ assetsUrl('css/vendors_css.css') }}">
+		<!-- Style-->  
+		<link rel="stylesheet" href="{{ assetsUrl('css/style.css') }}">
+		<link rel="stylesheet" href="{{ assetsUrl('css/skin_color.css') }}">
+		<link href="{{ assetsUrl('css/loading.css') }}" rel="stylesheet">
+
+</head>
+	
+<body class="hold-transition theme-primary bg-img" style="background-image: url({{ assetsUrl('bg-login.png') }})">
+	<div id="preloader">
+		<div class="sk-three-bounce">
+			<div class="centerpreloader">
+				<div class="ui-loading"></div>
+				<center><p class="mb-0" style="z-index: 99999999; color: white;"><b>Please Wait...</b></p></center>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container h-p100">
+		<div class="row align-items-center justify-content-md-center h-p100">	
+			
+			<div class="col-12">
+				<div class="row justify-content-center no-gutters">
+					<div class="col-lg-5 col-md-5 col-12">
+						<div class="bg-white rounded15 shadow-lg">
+							<div class="content-top-agile p-20 pb-0">
+								<h2 class="text-primary">
+									<img src="{{ assetsUrl('logo.png') }}">
+								</h2>
+								<p class="mb-0"><b>PORTAL LOWONGAN KERJA</b></p>	
+							</div>
+							<div class="p-40">
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<div class="input-group-prepend">
+												<span class="input-group-text bg-transparent"><i class="ti-user"></i></span>
+											</div>
+											<input type="text" id="inputEmail" class="form-control pl-15 bg-transparent" autocomplete="off" placeholder="Email">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<div class="input-group-prepend">
+												<span class="input-group-text  bg-transparent"><i class="ti-lock"></i></span>
+											</div>
+											<input type="password" id='inputPassword' class="form-control pl-15 bg-transparent" autocomplete="off" placeholder="Kata sandi">
+										</div>
+									</div>
+									  <div class="row">
+										<!-- /.col -->
+										<div class="col-6">
+										 <div class="fog-pwd text-left">
+											<a href="javascript:void(0)" class="hover-info">Daftar sekarang</a><br>
+										  </div>
+										</div>
+										<div class="col-6">
+										 <div class="fog-pwd text-right">
+											<a href="javascript:void(0)" class="hover-warning"><i class="ion ion-locked"></i> Lupa kata sandi ?</a><br>
+										  </div>
+										</div>
+										<!-- /.col -->
+										<div class="col-12 text-center">
+										  <button type="button" onclick="loginCheck();" class="btn btn-success mt-10">MASUK SEKARANG</button>
+										</div>
+										<!-- /.col -->
+									  </div>
+								</div>		
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Vendor JS -->
+	<script src="{{ assetsUrl('js/vendors.min.js') }}"></script>
+	<script src="{{ assetsUrl('js/pages/chat-popup.js') }}"></script>
+  <script src="{{ assetsUrl('assets/icons/feather-icons/feather.min.js') }}"></script>
+  <script src="{{ assetsUrl('js/axios.js') }}"></script>
+  <script src="{{ assetsUrl('assets/vendor_components/sweetalert/sweetalert.min.js') }}"></script>
+  <script type="text/javascript">
+		document.getElementById("inputEmail").addEventListener("keyup", function(event) {
+		  if (event.keyCode === 13) {
+		   event.preventDefault();
+		   loginCheck();
+		  }
+		});
+		document.getElementById("inputPassword").addEventListener("keyup", function(event) {
+		  if (event.keyCode === 13) {
+		   event.preventDefault();
+		   loginCheck();
+		  }
+		});
+
+  	async function loginCheck() {	
+			document.getElementById('preloader').style.display = "";
+		    axios.post('{{ route('login.check') }}', {
+	    			email : $('#inputEmail').val(),
+	        	password : $('#inputPassword').val()
+		  	})
+		  	.then(function (response) {
+		    	let resp = response.data;
+		    	window.location.pathname = resp.data.redirect_url;
+		  	})
+		  	.catch(function (error) {
+		  		document.getElementById('preloader').style.display = "none";
+		  		let resp = error.response.data;
+		  		swal("Information", resp.message, "info");
+		  });
+		}
+
+		$(document).ready(function() {
+    		setTimeout(function(){
+		         document.getElementById('preloader').style.display = "none";
+		    },2000);
+		});
+	</script>
+
+</body>
+</html>

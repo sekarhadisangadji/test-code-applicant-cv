@@ -1,0 +1,55 @@
+<aside class="main-sidebar">
+    <!-- sidebar-->
+    <section class="sidebar position-relative">	
+	  	<div class="multinav">
+		  <div class="multinav-scroll" style="height: 100%;">	
+			  <!-- sidebar menu-->
+			  <ul class="sidebar-menu">	
+			  	{{--  dashboard  --}}
+				@if(active_menu == 'dashboard')
+				<li class="treeview active">
+				@else
+				<li class="treeview">
+				@endif
+				<a href="{{ route('company.dashboard') }}">
+					<i class="icon-Layout-4-blocks"><span class="path1"></span><span class="path2"></span></i>
+					<span>Dashboard</span>
+					<span class="pull-right-container">
+					</span>
+				</a>
+				</li>
+				{{--  end dashboard  --}}
+
+				{{--  jobs  --}}
+				@if(active_menu == 'jobs')
+				<li class="treeview active">
+				@else
+				<li class="treeview">
+				@endif
+				  <a href="{{ route('company.dashboard') }}">
+					<i class="icon-File"><span class="path1"></span><span class="path2"></span></i>
+					<span>Pekerjaan</span>
+					<span class="pull-right-container">
+					</span>
+				  </a>
+				</li>
+				{{--  end jobs  --}}
+				{{--  kandidat  --}}
+				@if(active_menu == 'kandidat')
+				<li class="treeview active">
+				@else
+				<li class="treeview">
+				@endif
+				  <a href="{{ route('company.dashboard') }}">
+					<i class="icon-User"><span class="path1"></span><span class="path2"></span></i>
+					<span>Pelamar kerja</span>
+					<span class="pull-right-container">
+					</span>
+				  </a>
+				</li>
+				{{--  end kandidat  --}}
+			  </ul>
+		  </div>
+		</div>
+    </section>
+  </aside>

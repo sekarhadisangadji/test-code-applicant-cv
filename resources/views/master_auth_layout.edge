@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ assetsUrl('icon.png') }}">
+    <title>{{ title }} - Portal lowongan kerja</title>
+		<!-- Vendors Style-->
+		<link rel="stylesheet" href="{{ assetsUrl('css/vendors_css.css') }}">
+		<!-- Style-->  
+		<link rel="stylesheet" href="{{ assetsUrl('css/style.css') }}">
+		<link rel="stylesheet" href="{{ assetsUrl('css/skin_color.css') }}">
+		<link rel="stylesheet" href="{{ assetsUrl('css/loading.css') }}">
+		@!section('css')
+    
+  </head>
+
+<body class="hold-transition light-skin sidebar-mini theme-primary fixed">
+	
+<div class="wrapper">
+	<div id="preloader" style="display: none;">
+		<div class="sk-three-bounce">
+			<div class="centerpreloader">
+				<div class="ui-loading"></div>
+				<center><p class="mb-0" style="z-index: 99999999; color: white;"><b>Please Wait...</b></p></center>
+			</div>
+		</div>
+	</div>
+  <div id="loader"></div>
+	
+  @include('component.header')
+
+  <!-- SIDEBAR BY USER TYPE -->
+  @if(auth.user.type == 'admin')
+  	@include('component.sidebar.admin')
+  @elseif(auth.user.type == 'company')
+  	@include('component.sidebar.company')
+  @endif
+  <!-- END SIDEBAR BY USER TYPE -->
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+	  <div class="container-full">
+	  	<div class="content-header">
+				<div class="d-flex align-items-center">
+					<div class="mr-auto">
+						<h3 class="page-title">{{ title }}</h3>
+
+					</div>
+					
+				</div>
+			</div>	
+		<!-- Main content -->
+		<section class="content">
+			@!section('content')
+		</section>
+		<!-- /.content -->
+	  </div>
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="pull-right d-none d-sm-inline-block">
+        <ul class="nav nav-primary nav-dotted nav-dot-separated justify-content-center justify-content-md-end">
+		  <li class="nav-item">
+			Made By <a class="nav-link" href="#" target="_blank">INDONESIA MERDEKA</a>
+		  </li>
+		</ul>
+    </div>
+	  &copy; 2021 <a href="{{ route('base') }}">Portal Lowongan Kerja</a>. All Rights Reserved.
+  </footer>
+  
+  <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+  
+</div>
+<!-- ./wrapper -->
+	<!-- Sidebar -->
+	<!-- Vendor JS -->
+	<script src="{{ assetsUrl('js/vendors.min.js') }}"></script>
+	<script src="{{ assetsUrl('js/pages/chat-popup.js') }}"></script>
+  <script src="{{ assetsUrl('assets/icons/feather-icons/feather.min.js') }}"></script>	
+  @!section('vendor_js')
+	<!-- EduAdmin App -->
+	<script src="{{ assetsUrl('js/template.js') }}"></script>
+	<script src="{{ assetsUrl('js/axios.js') }}"></script>
+	<script src="{{ assetsUrl('js/accounting.js') }}"></script>
+	<script src="{{ assetsUrl('js/moment.js') }}"></script>
+	<script src="{{ assetsUrl('assets/vendor_components/sweetalert/sweetalert.min.js') }}"></script>
+	<script type="text/javascript">
+		function loadingPageShow() {
+			document.getElementById('preloader').style.display = "";
+		}
+
+		function loadingPageHide() {
+			document.getElementById('preloader').style.display = "none";
+		}
+
+		async function RespAPI(method,url,body) {
+			if(method == 'GET') {
+				return axios.get(url,{
+			        params : body,
+			        headers: {
+			            'Authorization': '{{ auth.user.api_key }}'
+			        } 
+			    });
+			} else if(method == 'POST') {
+				var data = body
+			    var headers = {
+			        withCredentials: false,
+			        headers: { 
+			            'Authorization': '{{ auth.user.api_key }}'
+			        }
+			    }
+			    return axios.post(url,data,headers);
+			}
+		}
+
+		function notificationAlert(tipe, title, message) {
+			swal(
+			  title,
+			  message,
+			  tipe
+			);
+		}
+
+		function formatNumberToIDR(nominal) {
+			return accounting.formatMoney(nominal, "Rp. ", 0, "."); 
+		}
+
+		function formatNumber(num) {
+		  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+		}
+
+	</script>
+	@!section('page_js')
+</body>
+</html>

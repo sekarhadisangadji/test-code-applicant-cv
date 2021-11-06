@@ -1,0 +1,25 @@
+<aside class="main-sidebar">
+    <!-- sidebar-->
+    <section class="sidebar position-relative">	
+	  	<div class="multinav">
+		  <div class="multinav-scroll" style="height: 100%;">	
+			  <!-- sidebar menu-->
+			  <ul class="sidebar-menu">	
+			  	@if(active_menu == 'dashboard')
+				<li class="treeview active">
+				@else
+				<li class="treeview">
+				@endif
+				  <a href="{{ route('admin.dashboard') }}">
+					<i class="icon-Layout-4-blocks"><span class="path1"></span><span class="path2"></span></i>
+					<span>Dashboard</span>
+					<span class="pull-right-container">
+					</span>
+				  </a>
+				</li>
+				
+			  </ul>
+		  </div>
+		</div>
+    </section>
+  </aside>
