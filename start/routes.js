@@ -36,7 +36,7 @@ Route.group(() => {
 
 Route.group(() => {
 
-	Route.get('dashboard', 'AdminController.dashboard').as('company.dashboard')
+	Route.get('dashboard', 'CompanyController.dashboard').as('company.dashboard')
 
 }).prefix('app/corporate').middleware('companyOnly')
 
@@ -53,3 +53,7 @@ Route.group(() => {
 
 // END ADMIN
 
+// API
+Route.group(() => {
+
+}).prefix('apiku').middleware('companyOnly')

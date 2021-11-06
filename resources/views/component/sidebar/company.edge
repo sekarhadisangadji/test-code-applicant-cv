@@ -48,6 +48,20 @@
 				  </a>
 				</li>
 				{{--  end kandidat  --}}
+				{{--  setting  --}}
+				@if(active_menu == 'setting')
+				<li class="treeview active">
+				@else
+				<li class="treeview">
+				@endif
+				  <a href="{{ route('company.dashboard') }}">
+					<i class="icon-Chat-locked"><span class="path1"></span><span class="path2"></span></i>
+					<span>Pengaturan</span>
+					<span class="pull-right-container">
+					</span>
+				  </a>
+				</li>
+				{{--  end setting  --}}
 			  </ul>
 		  </div>
 		</div>
