@@ -1,0 +1,109 @@
+@layout('master_auth_layout')
+
+@yield('css')
+<style type="text/css">
+    .spanText {
+            padding: auto;
+            display: inline-block;
+            font-size: 13px;
+        }
+    .box-body ul li {
+        line-height: 2px !important;
+    }
+    .btn-circle.btn-sm {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0;
+        border-radius: 100%;
+    }
+</style>
+@endyield
+
+
+@yield('content')
+<div class="row mb-10">
+	<div class="col-md-12">
+		<div class="pull-right">
+			<a href="{{ route('company.jobs.add') }}" class="btn btn-rounded btn-primary btn-outline btn-md" style="border-radius: 5px;">Tambah pekerjaan baru </a>
+		</div> 
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4 col-lg-4">
+	  <div class="box p-25 bg-success">
+		<div class="text-center">
+		  <h1 class="countnm font-size-50 m-0">1</h1>
+		  <div class="text-uppercase">TOTAL PEKERJAAN</div>
+		</div>
+	  </div>
+	</div>
+	<div class="col-md-4 col-lg-4">
+	  <div class="box p-25 bg-warning">
+		<div class="text-center">
+		  <h1 class="countnm font-size-50 m-0">1</h1>
+		  <div class="text-uppercase">TOTAL PEKERJAAN NON AKTIF</div>
+		</div>
+	  </div>
+	</div>
+	<div class="col-md-4 col-lg-4">
+	  <div class="box p-25 bg-info">
+		<div class="text-center">
+		  <h1 class="countnm font-size-50 m-0">1</h1>
+		  <div class="text-uppercase">TOTAL PELAMAR KERJA</div>
+		</div>
+	  </div>
+	</div>
+</div>
+{{--  TABLE  --}}
+<div class="row">
+	<div class="col-12 col-lg-12">
+	  <div class="box">
+		<div class="box-header with-border">
+		  <h4 class="box-title">
+		  	<input type="text" class="form-control" id="searchDataList" placeholder="Pencarian...">
+		  </h4>
+		</div>
+		<!-- /.box-header -->
+		<div class="box-body">
+			<span class="display-items spanText">Menampilkan <p class="spanText" id="minPerPage">0</p>-<p class="spanText" id="maxPerPage">0</p> / <p class="spanText" id="countData">0</p> data pencarian</span>
+			<div class="table-responsive">
+			  <table class="table table-sm table-striped mb-0">
+				  <thead>
+						<tr>
+							<th scope="col">No.</th>
+							<th scope="col">Title pekerjaan</th>
+							<th scope="col">Created</th>
+							<th scope="col">Status aktif</th>
+							<th scope="col">Create by</th>
+							<th scope="col">Action</th>
+						</tr>
+					</thead>
+				  <tbody id="hasilTable">
+				  </tbody>
+				</table>
+			</div>
+			<div class="dt-card__body mt-10">
+			        <!-- Pagination -->
+			        <ul class="pagination justify-content-end" id="paginateEmbed" style="display: none;">    	
+			        </ul>
+			        <!-- /pagination -->
+			    </div>
+		</div>
+		<!-- /.box-body -->
+	  </div>
+	  <!-- /.box -->
+	</div>
+</div>
+{{--  END TABLE  --}}
+@endyield
+
+
+@yield('vendor_js')
+
+@endyield
+
+
+@yield('page_js')
+
+@endyield

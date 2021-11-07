@@ -27,6 +27,9 @@ class KeahlianSeeder {
         name : "Laravel"
       }
     ]
+    for(let i in dataKeahlian) {
+      
+    }
 
   }
 }

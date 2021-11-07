@@ -1,0 +1,126 @@
+@layout('master_auth_layout')
+
+@yield('css')
+
+@endyield
+
+
+@yield('content')
+<div class="row justify-content-center">			  
+    <div class="col-lg-8 col-8">
+          <div class="box">
+            <div class="form">
+                <div class="box-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Title pekerjaan</label>
+                          <input type="text" class="form-control" id="titleJob">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Tanggal mulai aktif pekerjaan</label>
+                          <input type="date" class="form-control" id="datePostJob">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Deskripsi pekerjaan</label>
+                          <textarea class="form-control" style="resize:none; height:300px;" id="aboutJob"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    {{--  additional form  --}}
+                    <h4 class="box-title text-info">Additional form <button type="button" class="btn btn-rounded btn-success btn-outline btn-md mt-2 add-more" style="border-radius: 5px;">+</button></h4>
+                    <hr class="my-15">
+                    <div class="afterAddMore">
+                    </div>
+                    <br><br><br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <button type="button" onclick="submit()" class="btn btn-rounded btn-success btn-outline btn-md" style="border-radius: 5px;">Tambahkan </button>
+                            </div> 
+                        </div>
+                    </div> 
+                </div> 
+            </div>
+          </div>
+          <!-- /.box -->			
+    </div>  
+</div>
+@endyield
+
+
+@yield('vendor_js')
+
+@endyield
+
+
+@yield('page_js')
+<script type="text/javascript">
+
+        async function submit() {
+            loadingPageShow();
+            let valueLabel = []
+            var arrayLabel = $("input[name^='labelForm']");
+            for(i = 0; i < $("input[name^='labelForm']").length; i++) {
+                if(arrayLabel[i].value == "") {
+                    loadingPageHide();
+                    notificationAlert('info','Information',"Label dibutuhkan.");
+                    return false;
+                }
+                valueLabel.push(arrayLabel[i].value)
+            }
+            let valueTypeData = $("select[name=\'typeDataForm[]\']").map(function() {
+                return $(this).val();
+            }).toArray();
+            for(i = 0; i < valueTypeData.length; i++) {
+                if(valueTypeData[i] == '') {
+                    loadingPageHide();
+                    notificationAlert('info','Information',"Type data dibutuhkan.");
+                    return false;
+                }
+            }
+            const getDataRest = await RespAPI(
+                'POST',
+                "{{ route('api.jobs.add') }}",
+                {
+                    company      : '{{ auth.user.company_id }}',
+                    user         : '{{ auth.user.id }}',
+                    title        : $('#titleJob').val(),
+                    date         : $('#datePostJob').val(),
+                    about        : $('#aboutJob').val(),
+                    additional_label : valueLabel,
+                    additional_type : valueTypeData
+                }).then(function (response) {
+                    return response.data;
+                }).catch(function (error) {
+                    loadingPageHide();
+                    let resp = error.response.data;
+                    notificationAlert('info','Information',resp.message);
+                    return resp;
+                });
+            if(getDataRest.status == 200) {
+                loadingPageHide();
+                notificationAlert('success','Berhasil',getDataRest.message);
+                setTimeout(function(){
+                    window.location.href = '{{ route('company.jobs') }}'
+                },2000);
+            }
+        }
+
+    $(document).ready(function() {
+      $(".add-more").click(function(){ 
+          var html = '<div class="control-group row">                            <div class="col-md-6">                                <div class="form-group">                                  <label>Label</label>                                  <input type="text" class="form-control" name="labelForm[]">                                </div>                            </div>                            <div class="col-md-4">                                <div class="form-group">                                  <label>Type inputtan</label>                                  <select class="form-control" name="typeDataForm[]">                                      <option value="">pilih type input</option>                                      <option value="text">TEXT</option>                                      <option value="date">DATE</option>                                      <option value="longtext">LONGTEXT</option>                                  </select>                                </div>                            </div>                            <div class="col-md-2">                                <div class="form-group">                                    <label></label><br>                                    <button type="button" class="btn btn-rounded btn-danger btn-outline btn-md mt-2 remove" style="border-radius: 5px;">-</button>                                </div>                            </div>                        </div>';
+          $(".afterAddMore").append(html);
+      });
+
+      // saat tombol remove dklik control group akan dihapus 
+      $("body").on("click",".remove",function(){ 
+          $(this).parents(".control-group").remove();
+      });
+    });
+</script>
+@endyield

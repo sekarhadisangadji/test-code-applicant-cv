@@ -38,6 +38,14 @@ Route.group(() => {
 
 	Route.get('dashboard', 'CompanyController.dashboard').as('company.dashboard')
 
+	// JOBS
+
+	Route.get('jobs','CompanyController.jobs').as('company.jobs')
+
+	Route.get('jobs/add','CompanyController.jobsAdd').as('company.jobs.add')
+
+	// END JOBS
+
 	// SETTING
 	Route.get('setting','CompanyController.setting').as('company.setting')
 	// END SETTING
@@ -59,6 +67,12 @@ Route.group(() => {
 
 // API
 Route.group(() => {
+
+		// JOBS
+
+		Route.post('jobs/add','ApiController.jobsAdd').middleware('apikey:company').as('api.jobs.add')
+
+		// END JOBS
 
 		// COMPANY
 

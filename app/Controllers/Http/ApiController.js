@@ -8,9 +8,36 @@ const LibQuery           = use('App/Lib/query')
 
 class ApiController {
 
+    async jobsAdd({ request, response }) {
+        console.log(request.body)
+        const validation = await validate(request.body, {
+            title                 : 'required|string',
+            date                  : 'required|date',
+            about                 : 'required|string',
+            additional_label      : 'array',
+            additional_type       : 'array',
+            company               : 'required',
+            user                  : 'required'
+          })
+          if (validation.fails()) {
+            return response.status(422).json({
+                error : true,
+                status : 422,
+                message: validation.messages()[0].message
+            })
+          }
+          await LibQuery.createPostJob(request.body)
+          return response.status(200).json({
+                error: false,
+                status: 200,
+                message: "Successfully create job"
+          })
+
+    }
+
     async companyFind({ response, params }) {
         let find = await LibQuery.findCompany(params.id)
-        if(find == null) {
+        if(find == null || find == undefined) {
             return response.status(404).json({
                 error: true,
                 status:404,

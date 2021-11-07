@@ -14,8 +14,22 @@ class CompanyController {
 
 	async setting({ view }) {
 		return view.render('company.setting',{
-			title : 'Setting',
+			title : 'Pengaturan',
 			active_menu : 'setting'
+		})
+	}
+
+	async jobs({ view }) {
+		return view.render('company.jobs',{
+			title : 'List pekerjaan',
+			active_menu : 'jobs'
+		})
+	}
+
+	async jobsAdd({ view }) {
+		return view.render('company.jobs-add',{
+			title : 'Tambah pekerjaan',
+			active_menu : 'jobs'
 		})
 	}
 
