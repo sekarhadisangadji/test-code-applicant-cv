@@ -5,6 +5,11 @@ const Model = use('Model')
 
 class PostJob extends Model {
 
+    static boot() {
+        super.boot()
+        this.addTrait('@provider:Lucid/When')
+    }
+
     static get incrementing () {
         return false
     }
@@ -15,6 +20,14 @@ class PostJob extends Model {
 
     static get table () {
         return 'post_jobs'
+    }
+
+    form_additional() {
+        return this.hasMany('App/Models/FormPostJob','post_jobs_id','id');
+    }
+
+    user_create() {
+        return this.hasOne('App/Models/User','post_by_user_id','id');
     }
 
 }
