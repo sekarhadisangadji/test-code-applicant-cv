@@ -34,6 +34,18 @@ Route.group(() => {
 
 // END AUTH
 
+
+// APPLICANT
+
+Route.group(() => {
+
+	Route.get('profile', 'ApplicantController.profile').as('applicant.profile')
+
+
+}).prefix('app/applicant').middleware('applicantOnly')
+
+// END APPLICANT
+
 // COMPANY
 
 Route.group(() => {

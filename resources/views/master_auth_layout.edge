@@ -36,6 +36,8 @@
   	@include('component.sidebar.admin')
   @elseif(auth.user.type == 'company')
   	@include('component.sidebar.company')
+  @elseif(auth.user.type == 'applicant')
+  	@include('component.sidebar.applicant')
   @endif
   <!-- END SIDEBAR BY USER TYPE -->
 

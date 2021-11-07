@@ -43,6 +43,7 @@ const namedMiddleware = {
   guestOnly: 'App/Middleware/GuestOnly',
   adminOnly: 'App/Middleware/AuthAdminOnly',
   companyOnly: 'App/Middleware/AuthCompanyOnly',
+  applicantOnly: 'App/Middleware/AuthApplicantOnly',
   apikey: 'App/Middleware/ApiKeyAccess',
   guest: 'Adonis/Middleware/AllowGuestOnly'
 }

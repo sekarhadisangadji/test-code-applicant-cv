@@ -51,7 +51,7 @@ class LoginController {
 	    	} else if (user.type == 'company') {
 				urlPathRedirect = '/app/corporate/dashboard'
 			} else if (user.type == 'applicant') {
-				urlPathRedirect = '/app/applicant/dashboard'
+				urlPathRedirect = '/app/applicant/profile'
 			}
 	    	return response.status(200).json({
 		      	  error : false,
@@ -92,7 +92,7 @@ class LoginController {
 	    	} else if (user.type == 'company') {
 				urlPathRedirect = '/app/corporate/dashboard'
 			} else if (user.type == 'applicant') {
-				urlPathRedirect = '/app/applicant/dashboard'
+				urlPathRedirect = '/app/applicant/profile'
 			}
 	    	return response.status(200).json({
 		      	  error : false,

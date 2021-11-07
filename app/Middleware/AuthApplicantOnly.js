@@ -3,27 +3,25 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-class GuestOnly {
+class AuthApplicantOnly {
   /**
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle ({ request, auth, response }, next) {
+   async handle ({ request, auth, response, view }, next) {
     try {
       await auth.check()
       const user = await auth.user.toJSON()
-      if(user.type == 'admin') {
-        response.route('admin.dashboard')
-      } else if(user.type == 'company') {
-        response.route('company.dashboard')
-      } else if(user.type == 'applicant') {
-        response.route('applicant.profile')
+      if(user.type == 'applicant') {
+        await next()
+      } else {
+        return response.status(404).json('page not found')
       }
     } catch (error) {
-      await next()
+      return response.route('login.index')
     }
   }
 }
 
-module.exports = GuestOnly
+module.exports = AuthApplicantOnly
