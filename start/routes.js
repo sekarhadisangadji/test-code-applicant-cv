@@ -27,6 +27,8 @@ Route.get('/', async ({ response }) => {
 Route.group(() => {
 	Route.get('login', 'Auth/LoginController.index').as('login.index').middleware('guestOnly')
 	Route.post('login', 'Auth/LoginController.check').as('login.check').middleware('guestOnly')
+	Route.get('register', 'Auth/LoginController.register').as('register').middleware('guestOnly')
+	Route.post('register', 'Auth/LoginController.registerCheck').middleware('guestOnly')
 	Route.post('logout', 'Auth/LoginController.logout').as('logout').middleware('auth')
 }).prefix('auth')
 

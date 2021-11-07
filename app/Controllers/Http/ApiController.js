@@ -2,32 +2,14 @@
 
 const { validate } = use('Validator')
 var slugify = require('slugify')
-
 // LIB
 const LibQuery = use('App/Lib/query')
-// model
-const Job                       = use('App/Models/PostJob')
 
 class ApiController {
 
 
     async jobsList({ request, response }) {
-        const validation = await validate(request.body, {
-        orderby             : 'string',
-        orderby_type        : 'in:asc,desc'
-        })
-        if (validation.fails()) {
-        return response.status(422).json(validation.messages())
-        }
-        let limit = parseInt(request.all().limit,10) || 10;
-        let page = parseInt(request.all().page,10) || 1;
-        let query = Job.query()
-        query.with('form_additional')
-        query.with('user_create')
-        query.where('active','=',true)
-        query.when(request.all().search, (q,value) => q.where('title','LIKE', "%"+value+"%"))
-        query.orderBy('created_at','desc')
-        let getData = await query.paginate(page,limit)
+        let getData = await LibQuery.listPostJob(request)
         return response.status(200).json({
                 error: false,
                 status: 200,

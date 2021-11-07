@@ -39,10 +39,26 @@
 								<p class="mb-0"><b>PORTAL LOWONGAN KERJA</b></p>	
 							</div>
 							<div class="p-40">
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-transparent"><i class="ti-user"></i></span>
+                                        </div>
+                                        <input type="text" id="inputFirstName" class="form-control pl-15 bg-transparent" autocomplete="off" placeholder="First name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-transparent"><i class="ti-user"></i></span>
+                                        </div>
+                                        <input type="text" id="inputLastName" class="form-control pl-15 bg-transparent" autocomplete="off" placeholder="Last name">
+                                    </div>
+                                </div>
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<div class="input-group-prepend">
-												<span class="input-group-text bg-transparent"><i class="ti-user"></i></span>
+												<span class="input-group-text bg-transparent"><i class="ti-email"></i></span>
 											</div>
 											<input type="text" id="inputEmail" class="form-control pl-15 bg-transparent" autocomplete="off" placeholder="Email">
 										</div>
@@ -57,14 +73,8 @@
 									</div>
 									  <div class="row">
 										<!-- /.col -->
-										<div class="col-6">
-										 <div class="fog-pwd text-left">
-											<a href="{{ route('register') }}" class="hover-info">Daftar sekarang</a><br>
-										  </div>
-										</div>
-										<!-- /.col -->
 										<div class="col-12 text-center">
-										  <button type="button" onclick="loginCheck();" class="btn btn-success mt-10">MASUK SEKARANG</button>
+										  <button type="button" onclick="register();" class="btn btn-success mt-10">DAFTAR SEKARANG</button>
 										</div>
 										<!-- /.col -->
 									  </div>
@@ -84,23 +94,13 @@
   <script src="{{ assetsUrl('js/axios.js') }}"></script>
   <script src="{{ assetsUrl('assets/vendor_components/sweetalert/sweetalert.min.js') }}"></script>
   <script type="text/javascript">
-		document.getElementById("inputEmail").addEventListener("keyup", function(event) {
-		  if (event.keyCode === 13) {
-		   event.preventDefault();
-		   loginCheck();
-		  }
-		});
-		document.getElementById("inputPassword").addEventListener("keyup", function(event) {
-		  if (event.keyCode === 13) {
-		   event.preventDefault();
-		   loginCheck();
-		  }
-		});
 
-  	async function loginCheck() {	
+  	async function register() {	
 			document.getElementById('preloader').style.display = "";
-		    axios.post('{{ route('login.check') }}', {
-	    			email : $('#inputEmail').val(),
+		    axios.post('{{ route('register') }}', {
+                first_name : $('#inputFirstName').val(),
+                last_name : $('#inputLastName').val(),
+	    		email : $('#inputEmail').val(),
 	        	password : $('#inputPassword').val()
 		  	})
 		  	.then(function (response) {

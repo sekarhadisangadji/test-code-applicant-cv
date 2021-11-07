@@ -33,7 +33,7 @@
 	<div class="col-md-4 col-lg-4">
 	  <div class="box p-25 bg-success">
 		<div class="text-center">
-		  <h1 class="countnm font-size-50 m-0">1</h1>
+		  <h1 class="countnm font-size-50 m-0">{{ total_job }}</h1>
 		  <div class="text-uppercase">TOTAL PEKERJAAN</div>
 		</div>
 	  </div>
@@ -41,7 +41,7 @@
 	<div class="col-md-4 col-lg-4">
 	  <div class="box p-25 bg-warning">
 		<div class="text-center">
-		  <h1 class="countnm font-size-50 m-0">1</h1>
+		  <h1 class="countnm font-size-50 m-0">{{ total_non_active_job }}</h1>
 		  <div class="text-uppercase">TOTAL PEKERJAAN NON AKTIF</div>
 		</div>
 	  </div>
@@ -49,7 +49,7 @@
 	<div class="col-md-4 col-lg-4">
 	  <div class="box p-25 bg-info">
 		<div class="text-center">
-		  <h1 class="countnm font-size-50 m-0">1</h1>
+		  <h1 class="countnm font-size-50 m-0">0</h1>
 		  <div class="text-uppercase">TOTAL PELAMAR KERJA</div>
 		</div>
 	  </div>
@@ -105,5 +105,113 @@
 
 
 @yield('page_js')
+<script>
 
+	$('#searchDataList').keypress(function(e) {
+	    if (e.which == 13) {
+	        getData();
+	        e.preventDefault();
+	    }
+	});
+
+	function listDataTable(data, numForWhile) {
+		let event_data = '';
+    	$.each(data, function(index, value) {
+    		event_data += '<tr style="font-size: 12px;">';
+    		event_data += '<td><b>'+ numForWhile +'.</b></td>';
+    		event_data += '<td>'+value.title_job+'</td>';
+			event_data += '<td>'+moment(value.created_date_time).format('DD-MM-YYYY hh:mm a')+'</td>';
+			if(value.active == true) {
+				event_data += '<td>aktif</td>';
+			} else {
+				event_data += '<td>non aktif</td>';
+			}
+			event_data += '<td>'+value.user_create.first_name+' '+value.user_create.last_name+'</td>';
+			event_data += '<td>----</td>';
+    		event_data += '</tr>';
+        	numForWhile++;
+    	});
+    	return event_data;
+	}
+
+	function paginatePage(dataFetch) {
+	    let currentPage = dataFetch.page;
+	    let maxPage     = dataFetch.lastPage;
+	    let paginatetag = '';
+	    let i;
+	    let minPageCek  = (currentPage * 20) - 20;
+	    if ((currentPage * 20) > dataFetch.total) {
+	        document.getElementById("maxPerPage").innerHTML = formatNumber(dataFetch.total);
+	    } else {
+	        document.getElementById("maxPerPage").innerHTML = (currentPage * 30);
+	    }
+	    document.getElementById("minPerPage").innerHTML = (minPageCek + 1);
+	    $('#paginateEmbed li').remove();
+	    if(currentPage > 1) {
+	        paginatetag += '<li class="page-item"><a class="waves-effect waves-light btn btn-primary btn-flat" href="javascript:void(0)" onclick="getData('+(currentPage - 1)+');">Kembali</a></li>';
+	    } else {
+	        paginatetag += '<li class="page-item disabled"><a class="waves-effect waves-light btn btn-primary btn-flat">Kembali</a></li>';
+	    }
+	    if(currentPage < maxPage) {
+	        paginatetag += '<li class="page-item"><a class="waves-effect waves-light btn btn-primary btn-flat" href="javascript:void(0)" onclick="getData('+(currentPage + 1)+');">Selanjutnya</a></li>';
+	    } else if(currentPage == maxPage) {
+	        paginatetag += '<li class="page-item disabled"><a class="waves-effect waves-light btn btn-primary btn-flat">Selanjutnya</a></li>';
+	    }
+	    document.getElementById("countData").innerHTML = formatNumber(dataFetch.total);
+	    $("#paginateEmbed").append(paginatetag);
+	}
+
+	async function getData(pageNum = 1) {
+		loadingPageShow();
+		const getDataRest = await RespAPI(
+			'POST',
+			"{{ route('api.jobs.list') }}",
+			{
+				page: pageNum,
+				search: $('#searchDataList').val()
+			}
+			).then(function (response) {
+                return response.data;
+            }).catch(function (error) {
+            	loadingPageHide();
+            	let resp = error.response.data;
+		  		notificationAlert('info','Information',resp.message);
+		  		return resp;
+            });
+        let event_data = '';
+		console.log(getDataRest)
+        if(getDataRest.status == 200) {
+        	if(getDataRest.data.total != 0) {
+        		paginatePage(getDataRest.data);
+        		let numForWhile;
+				let numForWhileTambah;
+				let numPage;
+				numPage = getDataRest.data.page;
+				if (numPage == 1) {
+					numForWhile = 1;
+				} else {
+					numPage             = getDataRest.data.page;
+					numForWhileTambah   = (numPage * 20) - 20;
+					numForWhile         = numForWhileTambah + 1;
+				}
+		        event_data += listDataTable(getDataRest.data.data, numForWhile);
+		        document.getElementById('paginateEmbed').style.display      = "";
+		        document.getElementById('searchDataList').disabled          = false;
+        	} else {
+        		// document.getElementById('searchDataList').disabled          = true;
+        		document.getElementById('paginateEmbed').style.display      = "none";
+        		document.getElementById("maxPerPage").innerHTML = 0;
+        		document.getElementById("minPerPage").innerHTML = 0;
+        		document.getElementById("countData").innerHTML = 0;
+        		event_data += '<tr><td colspan="16"><center>Data tidak ditemukan/Kosong.</center></td></tr>';
+        	}
+        	$('#hasilTable tr').remove();
+    		$("#hasilTable").append(event_data);
+    		loadingPageHide();
+
+        }
+	}
+	// init page
+	getData();
+</script>
 @endyield

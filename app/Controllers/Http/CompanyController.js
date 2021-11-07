@@ -1,7 +1,7 @@
 'use strict'
 const { validate } = use('Validator')
-// model
-const User = use('App/Models/User')
+// LIB
+const LibQuery = use('App/Lib/query')
 
 class CompanyController {
 
@@ -20,9 +20,13 @@ class CompanyController {
 	}
 
 	async jobs({ view }) {
+		let totalJob = await LibQuery.getTotalPostJob()
+		let totalNonActiveJob = await LibQuery.getTotalPostJobNonActive()
 		return view.render('company.jobs',{
 			title : 'List pekerjaan',
-			active_menu : 'jobs'
+			active_menu : 'jobs',
+			total_job : totalJob.toString(),
+			total_non_active_job : totalNonActiveJob.toString()
 		})
 	}
 
