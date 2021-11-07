@@ -2,10 +2,11 @@
 
 class ApplicantController {
 
-    async profile({ view }) {
+    async profile({ view, auth }) {
         return view.render('applicant.profile',{
             title : 'Profile',
-            active_menu : 'profile'
+            active_menu : 'profile',
+            user : await auth.user.toJSON()
         })
     }
 

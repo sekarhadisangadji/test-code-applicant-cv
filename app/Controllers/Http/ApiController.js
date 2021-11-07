@@ -7,6 +7,32 @@ const LibQuery = use('App/Lib/query')
 
 class ApiController {
 
+    async profileUpdate({ request, response }) {
+        const validation = await validate(request.body, {
+            first_name: 'required|string',
+            last_name : 'required|string',
+            moto_profesional : 'required|string',
+            phone_number : 'required|string'
+        })
+        if (validation.fails()) {
+            return response.status(422).json({
+                error: true,
+                status: 422,
+                message: validation.messages()[0].message
+            })
+        }
+        let user = await LibQuery.findUser(request.auth_data.id)
+        user.first_name         = request.body.first_name
+        user.last_name          = request.body.last_name
+        user.moto_profesional   = request.body.moto_profesional
+        user.phone_number       = request.body.phone_number
+        await user.save()
+        return response.status(200).json({
+            error: false,
+            status: 200,
+            message: "Success update profile"
+        })
+    }
 
     async jobsList({ request, response }) {
         let getData = await LibQuery.listPostJob(request)

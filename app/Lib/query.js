@@ -9,6 +9,10 @@ const AditionalFormJob          = use('App/Models/FormPostJob')
 
 module.exports = {
 
+    findUser: async(id) => {
+        return await User.query().where('id','=',id).first()
+    },
+
     findCompany: async(id) => {
         return await Company.query().where('id','=',id).first()
     },
