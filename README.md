@@ -1,6 +1,6 @@
 # APPLICANT CV TEST CODE
 
-Test code membuat application applicant CV Menggunakan Framework AdoniJs dari NodeJs
+Test code membuat application applicant CV Menggunakan Framework AdonisJs dari NodeJs
 
 ## PREVIEW LAYOUT
 - LOGIN PAGE<br><br>
