@@ -6,11 +6,31 @@ const User                      = use('App/Models/User')
 const Company                   = use('App/Models/Company')
 const Job                       = use('App/Models/PostJob')
 const AditionalFormJob          = use('App/Models/FormPostJob')
+const PengalamanKerja           = use('App/Models/PengalamanKerjaApplicant')
 
 module.exports = {
 
     findUser: async(id) => {
         return await User.query().where('id','=',id).first()
+    },
+
+    createPengalamanKerja: async(body,userID) => {
+        const newPengalamanKerja = new PengalamanKerja()
+        newPengalamanKerja.id = uuidv4()
+        newPengalamanKerja.user_id = userID
+        newPengalamanKerja.posisi = body.posisi
+        newPengalamanKerja.jenis_pekerjaan = body.jenis_pekerjaan
+        newPengalamanKerja.nama_perusahaan = body.nama_perusahaan
+        newPengalamanKerja.lokasi_pekerjaan = body.lokasi_kerja
+        newPengalamanKerja.start_month = body.bulan_mulai
+        newPengalamanKerja.start_year = body.tahun_mulai
+        newPengalamanKerja.end_month = body.bulan_berakhir
+        newPengalamanKerja.end_year = body.tahun_berakhir
+        await newPengalamanKerja.save()
+    },
+
+    getAllPengalamanKerjaByID: async(idUser) => {
+        return await PengalamanKerja.query().where('user_id','=',idUser).orderBy('created_at','desc').fetch()
     },
 
     findCompany: async(id) => {

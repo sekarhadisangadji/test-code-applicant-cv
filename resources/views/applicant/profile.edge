@@ -7,7 +7,7 @@
 
 @yield('content')
 <div class="row">			  
-    <div class="col-lg-6 col-12">
+    <div class="col-lg-12 col-12">
           <div class="box">
             <div class="form">
                 <div class="box-body">
@@ -61,19 +61,142 @@
                 </div> 
             </div>
           </div>
-          <!-- /.box -->			
     </div>  
 </div>
+
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="box">
+           <div class="box-header with-border">
+             <h3 class="box-title">Pengalaman kerja</h3>
+                 <div class="row mt-10">
+                   <div class="col-md-3">
+                       <div class="form-group">
+                             <input type="text" id="inputPosisi" class="form-control" placeholder="Posisi">
+                       </div>
+                     </div>
+                     <div class="col-md-3">
+                       <div class="form-group">
+                             <input type="text" id="inputJenisPekerjaan" class="form-control" placeholder="Jenis pekerjaan">
+                       </div>
+                     </div>
+                     <div class="col-md-3">
+                        <div class="form-group">
+                              <input type="text" id="inputNamaPerusahaan" class="form-control" placeholder="Nama perusahaan">
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                              <input type="text" id="inputLokasiKerja" class="form-control" placeholder="Lokasi kerja">
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                              <input type="text" id="inputBulanMulai" class="form-control" placeholder="Bulan mulai">
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                              <input type="text" id="inputTahunMulai" class="form-control" placeholder="Tahun mulai">
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                              <input type="text" id="inputBulanBerakhir" class="form-control" placeholder="Bulan berakhir">
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                              <input type="text" id="inputTahunBerakhir" class="form-control" placeholder="Tahun berakhir">
+                        </div>
+                      </div>
+                     <div class="col-md-12">
+                       <div class="pull-right">
+                           <button type="button" onclick="addNewPengalamanKerja();" class="btn btn-rounded btn-primary btn-outline btn-md" style="border-radius: 5px;">Tambahkan </button>
+                       </div> 
+                   </div>
+               </div>
+           </div>
+           <!-- /.box-header -->
+           <div class="box-body">
+               <div class="table-responsive">
+                 <table class="table table-bordered table-striped datatables">
+                   <thead>
+                       <tr style="font-size: 12px;">
+                           <th>posisi</th>
+                           <th>Jenis pekerjaan</th>
+                           <th>Nama perusahaan</th>
+                           <th>Lokasi pekerjaan</th>
+                           <th>Masa kerja</th>
+                           <th>Action</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                        @each(valPengalamanKerja in pengalaman_kerja)
+                            <tr>
+                                <td>{{ valPengalamanKerja.posisi }}</td>
+                                <td>{{ valPengalamanKerja.jenis_pekerjaan }}</td>
+                                <td>{{ valPengalamanKerja.nama_perusahaan }}</td>
+                                <td>{{ valPengalamanKerja.lokasi_pekerjaan }}</td>
+                                <td>{{ valPengalamanKerja.start_month }} {{ valPengalamanKerja.start_year }} - {{ valPengalamanKerja.end_month }} {{ valPengalamanKerja.end_year }}</td>
+                                <td>---</td>
+                            </tr>
+                        @endeach
+                   </tbody>
+                 </table>
+               </div>
+           </div>
+           <!-- /.box-body -->
+         </div>
+         <!-- /.box -->         
+       </div>
+</div>
+
+
+        
 @endyield
 
 
 @yield('vendor_js')
-
+<script src="{{ assetsUrl('assets/vendor_components/datatable/datatables.min.js') }}"></script>
 @endyield
 
 
 @yield('page_js')
 <script>
+    $('.datatables').DataTable();
+
+    async function addNewPengalamanKerja() {
+        loadingPageShow();
+		const getDataRest = await RespAPI(
+			'POST',
+			"{{ route('api.pengalamankerja.add') }}",
+			{
+                posisi : $('#inputPosisi').val(),
+                jenis_pekerjaan : $('#inputJenisPekerjaan').val(),
+                nama_perusahaan : $('#inputNamaPerusahaan').val(),
+                lokasi_kerja : $('#inputLokasiKerja').val(),
+                bulan_mulai : $('#inputBulanMulai').val(),
+                tahun_mulai : $('#inputTahunMulai').val(),
+                bulan_berakhir : $('#inputBulanBerakhir').val(),
+                tahun_berakhir : $('#inputTahunBerakhir').val()
+			}
+			).then(function (response) {
+                return response.data;
+            }).catch(function (error) {
+            	loadingPageHide();
+            	let resp = error.response.data;
+		  		notificationAlert('info','Information',resp.message);
+		  		return resp;
+            });
+        if(getDataRest.status == 200) {
+        	notificationAlert('success','Berhasil',getDataRest.message);
+        	setTimeout(function(){
+        		window.location.href = "{{ route('applicant.profile') }}"
+		    },1000);
+        }
+    }
+    
     async function updateProfile() {
 		loadingPageShow();
 		const getDataRest = await RespAPI(

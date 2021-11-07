@@ -7,6 +7,33 @@ const LibQuery = use('App/Lib/query')
 
 class ApiController {
 
+    async pengalamanKerjaAdd({ request, response }) {
+        const validation = await validate(request.body, {
+            posisi : "required|string",
+            jenis_pekerjaan : "required|string",
+            nama_perusahaan : "required|string",
+            lokasi_kerja : "required|string",
+            bulan_mulai : "required|string",
+            tahun_mulai : "required|string",
+            bulan_berakhir : "required|string",
+            tahun_berakhir : "required|string"
+        })
+        if (validation.fails()) {
+            return response.status(422).json({
+                error: true,
+                status: 422,
+                message: validation.messages()[0].message
+            })
+        }
+        await LibQuery.createPengalamanKerja(request.body, request.auth_data.id)
+        return response.status(200).json({
+            error: false,
+            status: 200,
+            message: "Successfully"
+        })
+
+    }
+
     async profileUpdate({ request, response }) {
         const validation = await validate(request.body, {
             first_name: 'required|string',
