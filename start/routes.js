@@ -39,7 +39,11 @@ Route.group(() => {
 
 Route.group(() => {
 
+	Route.get('/search-jobs','ApplicantController.searchJob').as('applicant.searchJob')
+
 	Route.get('profile', 'ApplicantController.profile').as('applicant.profile')
+
+	Route.post('upload-cv','ApplicantController.uploadCV').as('applicant.uploadcv')
 
 
 }).prefix('app/applicant').middleware('applicantOnly')

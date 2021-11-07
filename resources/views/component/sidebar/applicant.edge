@@ -5,12 +5,12 @@
 		  <div class="multinav-scroll" style="height: 100%;">	
 			  <!-- sidebar menu-->
 			  <ul class="sidebar-menu">	
-                @if(active_menu == 'job')
+                @if(active_menu == 'search-job')
 				<li class="treeview active">
 				@else
 				<li class="treeview">
 				@endif
-				  <a href="{{ route('applicant.profile') }}">
+				  <a href="{{ route('applicant.searchJob') }}">
 					<i class="icon-Layout-grid"><span class="path1"></span><span class="path2"></span></i>
 					<span>Search job</span>
 					<span class="pull-right-container">
