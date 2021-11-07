@@ -26,6 +26,10 @@ class PostJob extends Model {
         return this.hasMany('App/Models/FormPostJob','post_jobs_id','id');
     }
 
+    company_data() {
+        return this.hasOne('App/Models/Company','company_id','id');
+    }
+
     user_create() {
         return this.hasOne('App/Models/User','post_by_user_id','id');
     }

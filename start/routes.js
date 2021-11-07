@@ -96,6 +96,8 @@ Route.group(() => {
 
 		Route.post('jobs/list','ApiController.jobsList').middleware('apikey:company,applicant').as('api.jobs.list')
 
+		Route.post('jobs/list/applicant','ApiController.jobsListApplicant').middleware('apikey:applicant').as('api.jobs.listapplicant')
+
 		// END JOBS
 
 		// COMPANY

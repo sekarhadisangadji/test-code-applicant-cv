@@ -61,8 +61,18 @@ class ApiController {
         })
     }
 
+    async jobsListApplicant({ request, response }) {
+        let getData = await LibQuery.listPostJobApplicant(request)
+        return response.status(200).json({
+                error: false,
+                status: 200,
+                message: "Success get list job applicant",
+                data: getData
+        })
+    }
+
     async jobsList({ request, response }) {
-        let getData = await LibQuery.listPostJob(request)
+        let getData = await LibQuery.listPostJob(request, request.auth_data.company_id)
         return response.status(200).json({
                 error: false,
                 status: 200,

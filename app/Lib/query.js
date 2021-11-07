@@ -47,11 +47,22 @@ module.exports = {
         return total[0].total
     },
 
-    listPostJob: async(request) => {
+    listPostJob: async(request, idCompany) => {
         let page = parseInt(request.all().page,10) || 1;
         let query = Job.query()
         query.with('form_additional')
         query.with('user_create')
+        query.where('company_id','=',idCompany)
+        query.when(request.all().search, (q,value) => q.where('title_job','LIKE', "%"+value+"%"))
+        query.orderBy('created_at','desc')
+        let getData = await query.paginate(page,20)
+        return getData
+    },
+
+    listPostJobApplicant: async(request) => {
+        let page = parseInt(request.all().page,10) || 1;
+        let query = Job.query()
+        query.with('company_data')
         query.where('active','=',true)
         query.when(request.all().search, (q,value) => q.where('title_job','LIKE', "%"+value+"%"))
         query.orderBy('created_at','desc')

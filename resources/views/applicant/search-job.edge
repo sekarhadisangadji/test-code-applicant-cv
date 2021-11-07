@@ -6,7 +6,28 @@
 
 
 @yield('content')
+<div class="row">			  
+    <div class="col-md-12">
+        <div class="form-group">
+            <input type="text" class="form-control" id="searchJob" placeholder="Cari sesuatu disini...">
+        </div>
+    </div>
+</div>
 
+<div class="row fx-element-overlay" id="listJobData">
+    					
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="dt-card__body mt-10">
+            <!-- Pagination -->
+            <ul class="pagination justify-content-center" id="paginateEmbed" style="display: none;">    	
+            </ul>
+            <!-- /pagination -->
+        </div>
+    </div>
+</div>
 @endyield
 
 
@@ -16,5 +37,92 @@
 
 
 @yield('page_js')
+<script>
 
+$   ('#searchJob').keypress(function(e) {
+	    if (e.which == 13) {
+	        getData();
+	        e.preventDefault();
+	    }
+	});
+
+	function listDataTable(data, numForWhile) {
+		let event_data = '';
+    	$.each(data, function(index, value) {
+            event_data += '<div class="col-lg-2 col-md-2 col-12 dataJob"><div class="box"><div class="fx-card-item">';
+            event_data += '<div class="fx-card-avatar fx-overlay-1"> <img src="{{ assetsUrl("logo_company.jpeg") }}" class="bbrr-0 bblr-0">';
+            event_data += '<div class="fx-overlay"><ul class="fx-info"><li><a class="btn btn-info btn-sm no-border" href="javascript:void(0);">LIHAT</a></li></ul></div></div>';
+            event_data += '<div class="fx-card-content"><h4 style="font-size:13px;" class="box-title mb-0">'+value.title_job+'</h4><p style="font-size:12px;">'+value.company_data.name_company+'</p></div></div></div></div>';
+    	});
+    	return event_data;
+	}
+
+    function paginatePage(dataFetch) {
+	    let currentPage = dataFetch.page;
+	    let maxPage     = dataFetch.lastPage;
+	    let paginatetag = '';
+	    let i;
+	    let minPageCek  = (currentPage * 20) - 20;
+	    $('#paginateEmbed li').remove();
+	    if(currentPage > 1) {
+	        paginatetag += '<li class="page-item"><a class="waves-effect waves-light btn btn-primary btn-flat" href="javascript:void(0)" onclick="getData('+(currentPage - 1)+');">Kembali</a></li>';
+	    } else {
+	        paginatetag += '<li class="page-item disabled"><a class="waves-effect waves-light btn btn-primary btn-flat">Kembali</a></li>';
+	    }
+	    if(currentPage < maxPage) {
+	        paginatetag += '<li class="page-item"><a class="waves-effect waves-light btn btn-primary btn-flat" href="javascript:void(0)" onclick="getData('+(currentPage + 1)+');">Selanjutnya</a></li>';
+	    } else if(currentPage == maxPage) {
+	        paginatetag += '<li class="page-item disabled"><a class="waves-effect waves-light btn btn-primary btn-flat">Selanjutnya</a></li>';
+	    }
+	    $("#paginateEmbed").append(paginatetag);
+	}
+
+    async function getData(pageNum = 1) {
+		loadingPageShow();
+		const getDataRest = await RespAPI(
+			'POST',
+			"{{ route('api.jobs.listapplicant') }}",
+			{
+				page: pageNum,
+				search: $('#searchJob').val()
+			}
+			).then(function (response) {
+                return response.data;
+            }).catch(function (error) {
+            	loadingPageHide();
+            	let resp = error.response.data;
+		  		notificationAlert('info','Information',resp.message);
+		  		return resp;
+            });
+        let event_data = '';
+        if(getDataRest.status == 200) {
+        	if(getDataRest.data.total != 0) {
+        		paginatePage(getDataRest.data);
+        		let numForWhile;
+				let numForWhileTambah;
+				let numPage;
+				numPage = getDataRest.data.page;
+				if (numPage == 1) {
+					numForWhile = 1;
+				} else {
+					numPage             = getDataRest.data.page;
+					numForWhileTambah   = (numPage * 20) - 20;
+					numForWhile         = numForWhileTambah + 1;
+				}
+		        event_data += listDataTable(getDataRest.data.data, numForWhile);
+		        document.getElementById('paginateEmbed').style.display      = "";
+        	} else {
+        		// document.getElementById('searchDataList').disabled          = true;
+        		document.getElementById('paginateEmbed').style.display      = "none";
+        		event_data += '';
+        	}
+        	$('#listJobData .dataJob').remove();
+    		$("#listJobData").append(event_data);
+    		loadingPageHide();
+
+        }
+	}
+
+    getData()
+</script>
 @endyield
