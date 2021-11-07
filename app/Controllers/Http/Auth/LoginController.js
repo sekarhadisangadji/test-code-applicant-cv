@@ -18,9 +18,9 @@ class LoginController {
 	      password: 'required'
 	    })
 		if (validation.fails()) {
-	      return response.status(401).json({
+	      return response.status(422).json({
 	      	  error : true,
-	          status : 401,
+	          status : 422,
 	          message: validation.messages()[0].message
 	      })
 	    }
@@ -44,9 +44,9 @@ class LoginController {
 		        }
 		    })
 	    } catch(e) {
-	    	return response.status(401).json({
+	    	return response.status(422).json({
 	      	  error : true,
-	          status : 401,
+	          status : 422,
 	          message: 'Email dan password salah.'
 	      })
 	    }

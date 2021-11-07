@@ -1,0 +1,155 @@
+@layout('master_auth_layout')
+
+@yield('css')
+
+@endyield
+
+
+@yield('content')
+<div class="row">			  
+    <div class="col-lg-6 col-12">
+          <div class="box">
+            <div class="form">
+                <div class="box-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Name company</label>
+                          <input type="text" class="form-control" id="nameCompany">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Moto company</label>
+                          <input type="text" class="form-control" id="motoCompany">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>About company</label>
+                          <textarea id="aboutCompany" class="form-control" style="resize:none; height:260px;"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Website company</label>
+                          <input type="text" class="form-control" id="websiteCompany">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Industri company</label>
+                          <input type="text" class="form-control" id="industriCompany">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Head office location company</label>
+                          <input type="text" class="form-control" id="headOfficeLocationCompany">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Jenis company</label>
+                          <input type="text" class="form-control" id="jenisCompany">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Tahun berdiri company</label>
+                          <input type="text" class="form-control" id="tahunBerdiriCompany">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Spesialis company</label>
+                          <input type="text" class="form-control" id="spesialisCompany">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <button type="button" onclick="updateCompany()" class="btn btn-rounded btn-success btn-outline btn-md" style="border-radius: 5px;">Perbaharui </button>
+                            </div> 
+                        </div>
+                    </div> 
+                </div> 
+            </div>
+          </div>
+          <!-- /.box -->			
+    </div>  
+</div>
+@endyield
+
+
+@yield('vendor_js')
+
+@endyield
+
+
+@yield('page_js')
+<script>
+
+        async function updateCompany() {
+            loadingPageShow();
+            const getDataRest = await RespAPI(
+                'POST',
+                "{{ route('api.company.update',{ id : auth.user.company_id }) }}",
+                {
+                    name_company        : $('#nameCompany').val(),
+                    moto_company        : $('#motoCompany').val(),
+                    about_company       : $('#aboutCompany').val(),
+                    website_company     : $('#websiteCompany').val(),
+                    industri_company    : $('#industriCompany').val(),
+                    head_office_location_company : $('#headOfficeLocationCompany').val(),
+                    jenis_company                : $('#jenisCompany').val(),
+                    tahun_berdiri_company        : $('#tahunBerdiriCompany').val(),
+                    spesialis_company            : $('#spesialisCompany').val()
+                }
+                ).then(function (response) {
+                    return response.data;
+                }).catch(function (error) {
+                    loadingPageHide();
+                    let resp = error.response.data;
+                    notificationAlert('info','Information',resp.message);
+                    return resp;
+                });
+            if(getDataRest.status == 200) {
+                loadingPageHide();
+                notificationAlert('success','Berhasil',getDataRest.message);
+            }
+        }
+
+        async function loadCompanyData() {
+            loadingPageShow();
+            const getDataRest = await RespAPI(
+                'GET',
+                "{{ route('api.company.find',{ id : auth.user.company_id }) }}",
+                {}
+                ).then(function (response) {
+                    return response.data;
+                }).catch(function (error) {
+                    loadingPageHide();
+                    let resp = error.response.data;
+                    notificationAlert('info','Information',resp.message);
+                    return resp;
+                });
+            if(getDataRest.status == 200) {
+                loadingPageHide();
+                let bodyData = getDataRest.data;
+                $('#nameCompany').val(bodyData.name_company)
+                $('#motoCompany').val(bodyData.moto_company)
+                $('#aboutCompany').val(bodyData.about)
+                $('#websiteCompany').val(bodyData.website)
+                $('#industriCompany').val(bodyData.industri)
+                $('#headOfficeLocationCompany').val(bodyData.location_head_office)
+                $('#jenisCompany').val(bodyData.jenis_company)
+                $('#tahunBerdiriCompany').val(bodyData.years_of_standing)
+                $('#spesialisCompany').val(bodyData.spesialis)
+            }
+        }
+
+        loadCompanyData()
+</script>
+@endyield

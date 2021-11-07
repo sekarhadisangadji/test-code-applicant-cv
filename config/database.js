@@ -50,6 +50,7 @@ module.exports = {
   mysql: {
     client: 'mysql',
     connection: {
+      timezone: Env.get('TIME_ZONE', 'Asia/Jakarta'),
       host: Env.get('DB_HOST', 'localhost'),
       port: Env.get('DB_PORT', ''),
       user: Env.get('DB_USER', 'root'),

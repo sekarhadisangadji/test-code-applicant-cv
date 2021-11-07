@@ -7,9 +7,16 @@ class CompanyController {
 
     async dashboard({ view }) {
 		return view.render('company.dashboard',{
-	   	title : 'Dashboard',
-	   	active_menu : 'dashboard'
-	   })
+	   		title : 'Dashboard',
+	   		active_menu : 'dashboard'
+	   	})
+	}
+
+	async setting({ view }) {
+		return view.render('company.setting',{
+			title : 'Setting',
+			active_menu : 'setting'
+		})
 	}
 
 }

@@ -38,6 +38,10 @@ Route.group(() => {
 
 	Route.get('dashboard', 'CompanyController.dashboard').as('company.dashboard')
 
+	// SETTING
+	Route.get('setting','CompanyController.setting').as('company.setting')
+	// END SETTING
+
 }).prefix('app/corporate').middleware('companyOnly')
 
 // END COMPANY
@@ -56,4 +60,12 @@ Route.group(() => {
 // API
 Route.group(() => {
 
-}).prefix('apiku').middleware('companyOnly')
+		// COMPANY
+
+		Route.get('company/:id', 'ApiController.companyFind').middleware('apikey:company,applicant').as('api.company.find')
+
+		Route.post('company/update/:id', 'ApiController.companyUpdate').middleware('apikey:company').as('api.company.update')
+
+		// END COMPANY
+
+}).prefix('apiku')
